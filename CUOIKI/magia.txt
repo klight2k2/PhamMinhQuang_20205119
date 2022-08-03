@@ -1,0 +1,87 @@
+	char inputString[1000], initString[1000]
+	char defaultString=""Bo mon ky thuat may tinh" 
+	int initStringLength=0
+
+changeDefaultString:
+	print "Do you want change default string"
+	# dung confirm dialog va xem trang thai duoc luu o thanh ghi $a0
+	status=$a0
+	if status=0 
+		print "Please enter string(under 100 character):"
+		get(initString)
+
+		getLength:
+		for i=i to 100
+			if initString[i]=='\n' initString[i]='\0'
+			if initString[i]=='\0' break
+			initStringLength+=1;
+
+	else	
+		defaultString:
+			initStringLength=24
+			for i=0 to initStringLength-1
+				initString[i]=STRING_DEFAULT[i]
+
+main:
+	#khoi tao cac gia tri
+	int numKey=0, countLoop=0, hangSo=10, totalLoop=200, keyPerSecond=0
+	
+	loop:
+		waitForKey:
+			if(KEY_READY==0) goto countTime
+		makeInterupt:
+			keyPerSecond+=1 # tang so ki tu nhap duoc trong 1s them 1
+			goto InteruptSubroutine
+		countTime:
+			countLoop+=1
+			if countLoop<200 
+				sleep(5ms)
+				goto loop
+			print "total key per second  : ", keyPerSecond
+		displayDigital:
+		#hien thi gia tri len len 7 thanh
+		keyPersecond=0
+
+
+	exit
+
+
+InteruptSubroutine:
+		# nhan nguyen nhan gay ra interupt
+	if(cause=MASK_CAUSE_KEYBOARD)
+		keyRead:  key=KEY_CODE
+		waitForDis:
+			If(DISPLAY_READY==0) goto waitForDis
+	showKey:
+		#hien thi len thiet bi MMIO roi luu vao inputString
+		inputString[numKey]=key
+		numKey+=1
+		if key=='\n' goto end
+		else goto countTime
+
+
+
+end:
+	int totalKeyCorrect=0, length
+	if initStringLength< numKey
+		length=numKey
+	else length=initStringLength
+
+compareString
+	print inputString
+	for i=0 to length
+		if initString[i]!=inputString[i] 
+			continue
+		totalKeyCorrect+=1
+printResult:
+	print  "number of key corect: ",totalKeyCorrect
+	displayDigital
+		
+
+quitProgram:
+	# hoi nguoi dung muon tiep tuc chuong trinh khong
+	if muonTiepTuc goto main
+	else
+		exit
+		
+		

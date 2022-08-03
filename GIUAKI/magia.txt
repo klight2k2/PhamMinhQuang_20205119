@@ -1,0 +1,50 @@
+main:
+	char inputString[51]
+	char listString[1000]
+	int stringLength=0
+	int stringIndex=0
+	print "Enter a string (under 50 character): "
+	[error,inputString]=inputDialog 
+
+isvalidString:
+		if error=-2 then print "nguoi dung muon thoat chuong trinh khong"
+		else if error <-2 print "invalid String"
+	
+getStringLength:
+		for i=0 to 50 
+			if inputString[i]=='/n' inputString[i]='/0'
+			if inputString[i]=='/0' break
+		 	stringLength++;
+		stringIndex=stringLength-1;
+handleCheckIsStored:
+		int check=0
+		for i=0 to 20
+			a=i*50
+			if(listString[a]=='/0') break
+			for j=0 to 50
+				if listString[a+j]!=inputString[j] break
+				if listString[a+j]=='/0' check=1
+			if check==1 	
+				print "This string is a palindrome!"
+				print "This string is stored in memory!"
+				Exit
+	
+checkPalindrome:	
+		checkPalindrome=0	
+		for i=0 to stringLength-1
+			j=stringLength-i-1
+			if i>=j 
+				checkPalindrome=1
+				break
+			if inputString[i]!=inputString[j]
+					print "This string is not a palindrome!"
+					Exit
+		if checkPalindrome=1 print "This string is a palindrome!"
+handleStoreString:
+		for i=0 to 19
+			j=i*50
+			if(listString[j]='/0')
+				for k=0 to stringLength-1
+					listString[j+k]=inputString[k]
+				break
+		Exit
